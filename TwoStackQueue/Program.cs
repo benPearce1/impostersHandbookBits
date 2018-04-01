@@ -17,16 +17,30 @@ namespace TwoStackQueue
             Stopwatch sw = Stopwatch.StartNew();
             for (int i = 0; i < 10000; i++)
             {
-                //Console.WriteLine($"Queuing {i}");
                 Enqueue(i);    
             }
-            Console.WriteLine($"Enqueuing took {sw.ElapsedMilliseconds} milliseconds");
+            Console.WriteLine($"Enqueuing 10000 took {sw.ElapsedMilliseconds} milliseconds");
+
+            sw.Restart();
+            for (int i = 0; i < 5000; i++) 
+            {
+                Dequeue();
+            }
+            Console.WriteLine($"Dequeuing 5000 took {sw.ElapsedMilliseconds} milliseconds");
+            
+            sw.Restart();
+            for (int i = 0; i < 5000; i++) 
+            {
+                Enqueue(i);
+            }
+            Console.WriteLine($"Enqueuing 5000 took {sw.ElapsedMilliseconds} milliseconds");
+
             sw.Restart();
             for (int i = 0; i < 10000; i++) 
             {
                 Dequeue();
             }
-            Console.WriteLine($"Dequeuing took {sw.ElapsedMilliseconds} milliseconds");
+            Console.WriteLine($"Dequeuing 10000 took {sw.ElapsedMilliseconds} milliseconds");
             
         }
 
@@ -35,18 +49,17 @@ namespace TwoStackQueue
         }
 
         static int Dequeue() {
+            if (Out.Any())
+            {
+                return Out.Pop();
+            }
+
             while (In.Any())
             {
                 Out.Push(In.Pop());
             }
 
-            var returnValue = Out.Pop();
-            while (Out.Any()) 
-            {
-                In.Push(Out.Pop());
-            }
-            
-            return returnValue;
+            return Out.Pop();
         }
 
         static void PrintQueue() {
