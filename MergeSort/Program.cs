@@ -11,23 +11,30 @@ namespace MergeSort
         {
             var list = new [] { 4,3,2,1 };
             Stopwatch sw = Stopwatch.StartNew();
-            MergeSort(list);
+            var sorted = MergeSort(list);
             sw.Stop();
             Console.WriteLine($"Sorted {list.Count()} items in {sw.ElapsedMilliseconds} milliseconds");
+            DumpList(sorted);
 
             Random r = new Random();
-            list = Enumerable.Range(0,10000000).Select(x=>r.Next()).ToArray();
-            sw.Start();
-            MergeSort(list);
-            sw.Stop();
-            Console.WriteLine($"Sorted {list.Count()} items in {sw.ElapsedMilliseconds} milliseconds");
-
+            
+            list = Enumerable.Range(0,100000).Select(x=>r.Next()).ToArray();
             var l = list.ToList();
+            GC.Collect();
             sw.Start();
             l.Sort();
             sw.Stop();
             Console.WriteLine($"Sorted {list.Count()} items in {sw.ElapsedMilliseconds} milliseconds");
 
+
+            list = Enumerable.Range(0,100000).Select(x=>r.Next()).ToArray();
+            GC.Collect();
+            sw.Start();
+            MergeSort(list);
+            sw.Stop();
+            Console.WriteLine($"Sorted {list.Count()} items in {sw.ElapsedMilliseconds} milliseconds");
+
+            
         }
 
         static IEnumerable<T> MergeSort<T>(IEnumerable<T> source) where T: IComparable
@@ -41,25 +48,23 @@ namespace MergeSort
         static IEnumerable<T> Merge<T>(IEnumerable<T> left, IEnumerable<T> right) where T: IComparable 
         {
             var result = new List<T>();
-            while (left.Any() || right.Any()) {
-                if (left.Any() && right.Any()) {
-                    if (left.First().CompareTo(right.First()) < -1) {
-                        result.Add(left.First());
-                        left = left.Skip(1);
+            int leftPostion = 0, rightPostion = 0;
+            while (leftPostion < left.Count() || rightPostion < right.Count()) {
+                if (leftPostion < left.Count() && rightPostion < right.Count()) {
+                    if (left.ElementAt(leftPostion).CompareTo(right.ElementAt(rightPostion)) < -1) {
+                        result.Add(left.ElementAt(leftPostion++));
+                        leftPostion++;
                     }
                     else {
-                        result.Add(right.First());
-                        right = right.Skip(1);
+                        result.Add(right.ElementAt(rightPostion++));
                     }
                 }
                 else { 
-                    if (left.Any()) {
-                        result.Add(left.First());
-                        left  = left.Skip(1);
+                    if (leftPostion < left.Count()) {
+                        result.Add(left.ElementAt(leftPostion++));
                     }
                     else {
-                        result.Add(right.First());
-                        right = right.Skip(1);
+                        result.Add(right.ElementAt(rightPostion++));
                     }
                 }
             }
