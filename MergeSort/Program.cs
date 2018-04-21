@@ -18,18 +18,18 @@ namespace MergeSort
 
             Random r = new Random();
             
-            list = Enumerable.Range(0,100000).Select(x=>r.Next()).ToArray();
+            list = Enumerable.Range(0,1000000).Select(x=>r.Next()).ToArray();
             var l = list.ToList();
             GC.Collect();
-            sw.Start();
+            sw.Restart();
             l.Sort();
             sw.Stop();
             Console.WriteLine($"Sorted {list.Count()} items in {sw.ElapsedMilliseconds} milliseconds");
 
 
-            list = Enumerable.Range(0,100000).Select(x=>r.Next()).ToArray();
+            list = Enumerable.Range(0,1000000).Select(x=>r.Next()).ToArray();
             GC.Collect();
-            sw.Start();
+            sw.Restart();
             MergeSort(list);
             sw.Stop();
             Console.WriteLine($"Sorted {list.Count()} items in {sw.ElapsedMilliseconds} milliseconds");
@@ -51,7 +51,7 @@ namespace MergeSort
             int leftPostion = 0, rightPostion = 0;
             while (leftPostion < left.Count() || rightPostion < right.Count()) {
                 if (leftPostion < left.Count() && rightPostion < right.Count()) {
-                    if (left.ElementAt(leftPostion).CompareTo(right.ElementAt(rightPostion)) < -1) {
+                    if (left.ElementAt(leftPostion).CompareTo(right.ElementAt(rightPostion)) < 0) {
                         result.Add(left.ElementAt(leftPostion++));
                         leftPostion++;
                     }
