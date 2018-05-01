@@ -40,6 +40,21 @@ namespace SortedListPerfTest
             allNumbersOverAvg = sortedList.Where(x => x > avg);
             sw.Stop();
             Console.WriteLine($"Average number search for sorted list: {sw.ElapsedMilliseconds}");
+
+            int randomPostion = r.Next(list.Count);
+            int targetValue = sortedList.ElementAt(randomPostion);
+
+            sw.Restart();
+            sortedList.Where(x => x == targetValue);
+            sw.Stop();
+            Console.WriteLine($"Search for {targetValue} in sorted list: {sw.ElapsedMilliseconds}");
+
+            sw.Restart();
+            list.Where(x => x == targetValue);
+            sw.Stop();
+            Console.WriteLine($"Search for {targetValue} in unsorted list: {sw.ElapsedMilliseconds}");
+            
+
         }
     }
 }
