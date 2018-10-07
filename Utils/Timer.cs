@@ -9,7 +9,7 @@ namespace Utils
         public Timer(Stopwatch sw)
         {
             this.sw = sw;
-            sw = Stopwatch.StartNew();
+            sw.Start();
         }
 
         public void Dispose()
